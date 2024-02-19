@@ -11,10 +11,12 @@ function listener(details) {
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
 
+        // Download without opening a new tab
         a.href = url;
         a.download = filename + ".pdf";
         a.click();
 
+        URL.revokeObjectURL(url);
         filter.write(event.data);
     };
     filter.onstop = (event) => {
