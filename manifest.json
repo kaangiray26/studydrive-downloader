@@ -23,5 +23,15 @@
             "96": "icons/96.png"
         },
         "default_title": "Studydrive Downloader"
-    }
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://www.studydrive.net/en/doc/*"
+            ],
+            "js": [
+                "inject.js"
+            ]
+        }
+    ]
 }

@@ -22,7 +22,7 @@ async function downloadfile() {
     URL.revokeObjectURL(url);
 }
 
-function header_listener(details) {
+async function header_listener(details) {
     console.log("Request:", details);
 
     // Reset the values
@@ -33,33 +33,11 @@ function header_listener(details) {
 function listener(details) {
     let filter = browser.webRequest.filterResponseData(details.requestId);
     filter.ondata = (event) => {
-        console.log("Request URL:", details.url);
-
         // Add array buffer to the requests_data array
         requests_data.push(event.data);
-
-        // Construct a filename for the requested file
-        // const filename = new URL(details.originUrl).pathname.split("/").slice(-2).join("_");
-
-        // Download the file
-        // const blob = new Blob([event.data], { type: "application/pdf" });
-        // requests_data.push(blob);
-        // const url = URL.createObjectURL(blob);
-        // const a = document.createElement("a");
-
-        // // Download without opening a new tab
-        // a.href = url;
-        // a.download = filename + ".pdf";
-        // a.click();
-
-        // URL.revokeObjectURL(url);
         filter.write(event.data);
     };
     filter.onstop = (event) => {
-        // The extension should always call filter.close() or filter.disconnect()
-        // after creating the StreamFilter, otherwise the response is kept alive forever.
-        // If processing of the response data is finished, use close. If any remaining
-        // response data should be processed by Firefox, use disconnect.
         filter.close();
     };
 }
@@ -78,7 +56,11 @@ browser.webRequest.onHeadersReceived.addListener(
     ["responseHeaders"],
 );
 
-// Button click listener
-browser.browserAction.onClicked.addListener(downloadfile);
+// Message listener
+browser.runtime.onMessage.addListener((message) => {
+    if (message.action === "download") {
+        downloadfile();
+    }
+});
 
 console.log(Date.now(), "Background script started...");
