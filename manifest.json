@@ -1,0 +1,19 @@
+{
+    "description": "Using webRequests to intercept and download files from Studydrive",
+    "manifest_version": 2,
+    "name": "Studydrive Downloader",
+    "version": "1.0",
+    "icons": {
+        "48": "icons/48.png"
+    },
+    "permissions": [
+        "webRequest",
+        "webRequestBlocking",
+        "https://www.studydrive.net/file-preview/*"
+    ],
+    "background": {
+        "scripts": [
+            "background.js"
+        ]
+    }
+}
